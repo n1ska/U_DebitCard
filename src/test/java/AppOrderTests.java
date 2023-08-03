@@ -1,3 +1,4 @@
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.conditions.ExactText;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class AppOrderTests {
 
     @Test
-    void SuccessTest() {
+    void successTask1Test() {
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=name] input").setValue("Нина");
@@ -20,31 +21,55 @@ public class AppOrderTests {
     }
 
     @Test
-    void CheckValidationNameTest() {
+    void checkValidationNameTask2Test() {
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=name] input").setValue("nina");
+        form.$("[data-test-id=phone] input").setValue("+712345678901");
+        form.$("[data-test-id=agreement]").click();
         form.$(".form-field>button").click();
-        assertTrue($(".input_invalid[data-test-id=name]").exists());
+        $(".input_invalid[data-test-id=name]").shouldBe(Condition.visible);
     }
 
     @Test
-    void CheckValidationTelephoneTest() {
+    void checkValidationTelephoneTask2Test() {
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=name] input").setValue("Нина");
-        form.$("[data-test-id=phone] input").setValue("+712345678901");
+        form.$("[data-test-id=phone] input").setValue("abcdefg");
+        form.$("[data-test-id=agreement]").click();
         form.$(".form-field>button").click();
-        assertTrue($(".input_invalid[data-test-id=phone]").exists());
+        $(".input_invalid[data-test-id=phone]").shouldBe(Condition.visible);
     }
 
     @Test
-    void CheckValidationAgreementTest() {
+    void checkValidationTelephoneWithoutFirstPlusTask2Test() {
+        open("http://localhost:9999");
+        SelenideElement form = $(".form");
+        form.$("[data-test-id=name] input").setValue("Нина");
+        form.$("[data-test-id=phone] input").setValue("712345678901");
+        form.$("[data-test-id=agreement]").click();
+        form.$(".form-field>button").click();
+        $(".input_invalid[data-test-id=phone]").shouldBe(Condition.visible);
+    }
+
+    @Test
+    void checkValidationTelephoneMore11SymbolsTask2Test() {
+        open("http://localhost:9999");
+        SelenideElement form = $(".form");
+        form.$("[data-test-id=name] input").setValue("Нина");
+        form.$("[data-test-id=phone] input").setValue("+123456789012");
+        form.$("[data-test-id=agreement]").click();
+        form.$(".form-field>button").click();
+        $(".input_invalid[data-test-id=phone]").shouldBe(Condition.visible);
+    }
+    @Test
+    void checkValidationAgreemenTask2tTest() {
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=name] input").setValue("Нина");
         form.$("[data-test-id=phone] input").setValue("+71234567890");
         form.$(".form-field>button").click();
-        assertTrue($(".input_invalid[data-test-id=agreement]").exists());
+        $(".input_invalid[data-test-id=agreement]").shouldBe(Condition.visible);
     }
 }
